@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Link and QR Code Generator</title>
+    <style>
+      body {
+        background-image: url("bg5.jpg");
+        background-size: cover;
+        background-position: center;
+        font-family: "Open Sans", sans-serif;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+      }
+
+      .container {
+        background-color: rgba(255, 255, 255, 0.8);
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        max-width: 400px;
+        width: 100%;
+      }
+
+      h2 {
+        color: #333;
+        margin-bottom: 20px;
+      }
+
+      input[type="text"] {
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        width: 100%;
+        box-sizing: border-box;
+        font-size: 16px;
+        margin-bottom: 10px;
+      }
+
+      button {
+        background-color: #4caf50;
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
+      }
+
+      button:hover {
+        background-color: #45a049;
+      }
+
+      #result {
+        background-color: rgba(255, 255, 255, 0.8);
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        max-width: 600px;
+        width: 100%;
+        margin-top: 20px;
+      }
+
+      #result h3 {
+        color: #333;
+        margin-bottom: 10px;
+      }
+
+      #result a {
+        color: #4caf50;
+        text-decoration: none;
+      }
+    </style>
+    <link
+      href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <h2>Enter Details</h2>
+      <input type="text" id="from" placeholder="Enter starting location" />
+      <input type="text" id="to" placeholder="Enter destination location" />
+      <button onclick="generateLink()">Submit</button>
+    </div>
+    <div id="result"></div>
+
+    <script>
+      function generateLink() {
+        const to = document.getElementById("to").value.toLowerCase();
+        const from = document.getElementById("from").value.toLowerCase();
+
+        let link1,
+          qrCode1,
+          link2,
+          qrCode2,
+          link3,
+          qrCode3,
+          link4,
+          qrCode4,
+          link5,
+          qrCode5;
+
+        if (from === "gate" && to === "research square") {
+          link1 = `https://kurv.gr/xcu7N`;
+          qrCode1 = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&amp;data=https://kurv.gr/xcu7N`;
+        } else if (from === "gate" && to === "canteen") {
+          link2 = `https://kurv.gr/2fJCY`;
+          qrCode2 = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&amp;data=https://kurv.gr/2fJCY`;
+        } else if (from === "gate" && to === "civil department") {
+          link3 = `https://kurv.gr/ppxmk`;
+          qrCode3 = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&amp;data=https://kurv.gr/ppxmk`;
+        } else if (from === "gate" && to === "computer science department") {
+          link4 = `https://kurv.gr/Sx6EJ`;
+          qrCode4 = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&amp;data=https://kurv.gr/Sx6EJ`;
+        } else if (from === "gate" && to === "Central Complex ") {
+          link5 = `https://kurv.gr/bsGmf`;
+          qrCode5 = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&amp;data=https://kurv.gr/bsGmf`;
+        } else {
+          alert(
+            "Please enter 'research square' in the 'To' field and 'gate' in the 'From' field, or 'canteen' in the 'To' field and 'gate' in the 'From' field."
+          );
+          return;
+        }
+
+        const resultDiv = document.getElementById("result");
+        resultDiv.innerHTML = `
+        ${
+          link1
+            ? `
+          <h3>Link for Research Square:</h3>
+          <a href="${link1}" target="_blank">${link1}</a>
+          <h3>QR Code for Research Square:</h3>
+          <img src="${qrCode1}" alt="QR Code">
+        `
+            : ""
+        }
+
+        ${
+          link2
+            ? `
+          <h3>Link for Canteen:</h3>
+          <a href="${link2}" target="_blank">${link2}</a>
+          <h3>QR Code for Canteen:</h3>
+          <img src="${qrCode2}" alt="QR Code">
+        `
+            : ""
+        }
+        ${
+          link3
+            ? `
+          <h3>Link for civil department:</h3>
+          <a href="${link3}" target="_blank">${link3}</a>
+          <h3>QR Code for Civil department:</h3>
+          <img src="${qrCode3}" alt="QR Code">
+        `
+            : ""
+        }
+        ${
+          link4
+            ? `
+          <h3>Link for computer science department:</h3>
+          <a href="${link4}" target="_blank">${link4}</a>
+          <h3>QR Code for computer science department:</h3>
+          <img src="${qrCode4}" alt="QR Code">
+        `
+            : ""
+        }
+        ${
+          link5
+            ? `
+          <h3>Link for Central Complex:</h3>
+          <a href="${link5}" target="_blank">${link5}</a>
+          <h3>QR Code for Central Comolex:</h3>
+          <img src="${qrCode5}" alt="QR Code">
+        `
+            : ""
+        }
+      `;
+      }
+    </script>
+  </body>
+</html>

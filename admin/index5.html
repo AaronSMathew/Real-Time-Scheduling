@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Link and QR Code Generator</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: "Poppins", sans-serif;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        background-size: 400% 400%;
+        animation: gradientAnimation 15s ease infinite;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      @keyframes gradientAnimation {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      .container {
+        background-color: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+        padding: 30px;
+        right: 100px;
+        max-width: 400px;
+        width: 100%;
+        height: 400px;
+        text-align: center;
+      }
+
+      h2 {
+        color: #fff;
+        margin-bottom: 20px;
+        text-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      }
+
+      .dropdown {
+        position: relative;
+        margin-bottom: 20px;
+      }
+
+      .dropdown-select {
+        padding: 10px;
+        border-radius: 5px;
+        border: none;
+        background-color: rgba(255, 255, 255, 0.3);
+        color: #fff;
+        width: 100%;
+        box-sizing: border-box;
+        font-size: 16px;
+        cursor: pointer;
+        text-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+      }
+
+      .dropdown-options {
+        position: absolute;
+        background-color: rgba(255, 255, 255, 0.3);
+        backdrop-filter: blur(10px);
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        width: 100%;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        z-index: 1;
+        max-height: 0;
+        overflow-y: auto;
+        transition: max-height 0.3s ease;
+      }
+
+      .dropdown-options.show {
+        max-height: 200px;
+      }
+
+      .dropdown-options li {
+        padding: 10px;
+        cursor: pointer;
+        color: #fff;
+        text-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+        transition: background-color 0.3s ease;
+      }
+
+      .dropdown-options li:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+      }
+
+      button {
+        background-color: #fff;
+        color: #667eea;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s ease, color 0.3s ease;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        margin-right: 10px;
+      }
+
+      button:hover {
+        background-color: #667eea;
+        color: #fff;
+      }
+
+      .button-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 220px;
+      }
+
+      #result {
+        background-color: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+        text-align: center;
+        max-width: 600px;
+        margin-left: 210px;
+        width: 100%;
+        margin-top: 20px;
+        padding: 20px;
+        opacity: 0;
+        transform: scale(0.8);
+        transition: opacity 0.3s ease, transform 0.3s ease;
+      }
+
+      #result.show {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      #result h3 {
+        color: #fff;
+        margin-bottom: 10px;
+        text-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      }
+
+      #result a {
+        color: #fff;
+        text-decoration: none;
+        text-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+        transition: color 0.3s ease;
+      }
+
+      #result a:hover {
+        color: #667eea;
+      }
+
+      #result img {
+        max-width: 200px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Enter Destination</h2>
+      <div class="dropdown">
+        <div class="dropdown-select">Select Destination</div>
+        <ul class="dropdown-options">
+          <li>Computer Science Department</li>
+          <li>Mechanical Department</li>
+          <li>Canteen</li>
+          <li>Civil Department</li>
+          <li>Research Square</li>
+        </ul>
+      </div>
+      <div class="button-container">
+        <button onclick="generateLink()">Submit</button>
+      </div>
+    </div>
+    <div id="result"></div>
+
+    <script>
+      const dropdownSelect = document.querySelector(".dropdown-select");
+      const dropdownOptions = document.querySelector(".dropdown-options");
+      const options = dropdownOptions.querySelectorAll("li");
+      let selectedOption = "";
+
+      dropdownSelect.addEventListener("click", () => {
+        dropdownOptions.classList.toggle("show");
+      });
+
+      options.forEach((option) => {
+        option.addEventListener("click", () => {
+          selectedOption = option.textContent;
+          dropdownSelect.textContent = selectedOption;
+          dropdownOptions.classList.remove("show");
+        });
+      });
+
+      function generateLink() {
+        const to = selectedOption.toLowerCase();
+        const from = "gate";
+
+        let link1,
+          qrCode1,
+          link2,
+          qrCode2,
+          link3,
+          qrCode3,
+          link4,
+          qrCode4,
+          link5,
+          qrCode5;
+
+        if (from === "gate" && to === "research square") {
+          link1 = `https://kurv.gr/xcu7N`;
+          qrCode1 = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&amp;data=https://kurv.gr/xcu7N`;
+        } else if (from === "gate" && to === "canteen") {
+          link2 = `https://kurv.gr/2fJCY`;
+          qrCode2 = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&amp;data=https://kurv.gr/2fJCY`;
+        } else if (from === "gate" && to === "civil department") {
+          link3 = `https://kurv.gr/ppxmk`;
+          qrCode3 = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&amp;data=https://kurv.gr/ppxmk`;
+        } else if (from === "gate" && to === "computer science department") {
+          link4 = `https://kurv.gr/Sx6EJ`;
+
+          qrCode4 = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&amp;data=https://kurv.gr/Sx6EJ`;
+        } else if (from === "gate" && to === "mechanical department") {
+          link5 = `https://kurv.gr/bsGmf`;
+          qrCode5 = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&amp;data=https://kurv.gr/bsGmf`;
+        } else {
+          alert("Please select a destination from the dropdown menu.");
+          return;
+        }
+        const resultDiv = document.getElementById("result");
+        resultDiv.innerHTML = `
+        ${
+          link1
+            ? `
+          <h3>Link for Research Square:</h3>
+          <a href="${link1}" target="_blank">${link1}</a>
+          <h3>QR Code for Research Square:</h3>
+          <img src="${qrCode1}" alt="QR Code">
+        `
+            : ""
+        }
+
+        ${
+          link2
+            ? `
+          <h3>Link for Canteen:</h3>
+          <a href="${link2}" target="_blank">${link2}</a>
+          <h3>QR Code for Canteen:</h3>
+          <img src="${qrCode2}" alt="QR Code">
+        `
+            : ""
+        }
+        ${
+          link3
+            ? `
+          <h3>Link for Civil Department:</h3>
+          <a href="${link3}" target="_blank">${link3}</a>
+          <h3>QR Code for Civil Department:</h3>
+          <img src="${qrCode3}" alt="QR Code">
+        `
+            : ""
+        }
+        ${
+          link4
+            ? `
+          <h3>Link for Computer Science Department:</h3>
+          <a href="${link4}" target="_blank">${link4}</a>
+          <h3>QR Code for Computer Science Department:</h3>
+          <img src="${qrCode4}" alt="QR Code">
+        `
+            : ""
+        }
+        ${
+          link5
+            ? `
+          <h3>Link for Mechanical Department:</h3>
+          <a href="${link5}" target="_blank">${link5}</a>
+          <h3>QR Code for Mechanical Department:</h3>
+          <img src="${qrCode5}" alt="QR Code">
+        `
+            : ""
+        }
+      `;
+        resultDiv.classList.add("show");
+      }
+    </script>
+  </body>
+</html>

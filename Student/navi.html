@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Rooms and Locations</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(270deg, #f5f5dc, #fdf5e6);
+        background-size: 400% 400%;
+        animation: AnimatedBackground 10s ease infinite;
+        color: #654321;
+      }
+
+      @keyframes AnimatedBackground {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      h1 {
+        text-align: center;
+      }
+
+      table {
+        margin: 0 auto;
+        border-collapse: collapse;
+        width: 80%;
+        background-color: #f5deb3;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      }
+
+      th,
+      td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #d2b48c;
+      }
+
+      th {
+        background-color: #a0522d;
+        color: #fff;
+      }
+
+      tr:nth-child(even) {
+        background-color: #f5f5dc;
+      }
+
+      tr:hover {
+        background-color: #deb887;
+      }
+
+      button {
+        background-color: #8b4513;
+        color: #fff;
+        border: none;
+        border-radius: 20px;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 14px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      button:hover {
+        background-color: #a0522d;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Rooms and Locations</h1>
+    <table>
+      <tr>
+        <th>CONFERENCE HALLS</th>
+        <th>Location</th>
+      </tr>
+      <tr>
+        <td>Computer Science HOD</td>
+        <td>
+          <button
+            onclick="window.open('https://kurviger.de?overlay=location&ovd=lat%3D9.527417100000001%26lng%3D76.82122455468007', '_blank')"
+          >
+            Open Location
+          </button>
+        </td>
+      </tr>
+      <tr>
+        <td>Amal Jyothi Driving Academy</td>
+        <td>
+          <button
+            onclick="window.open('https://kurviger.de?overlay=location&ovd=lat%3D9.5288853%26lng%3D76.8211903', '_blank')"
+          >
+            Open Location
+          </button>
+        </td>
+      </tr>
+      <tr>
+        <td>Startup Valley TBI</td>
+        <td>
+          <button
+            onclick="window.open('https://kurviger.de?overlay=location&ovd=lat%3D9.527556%26lng%3D76.8228919', '_blank')"
+          >
+            Open Location
+          </button>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
