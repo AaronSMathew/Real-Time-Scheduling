@@ -35,38 +35,7 @@ Class Action {
 
 
  
-	function login2(){
-		
-			extract($_POST);
-			if(isset($email))
-				$username = $email;
-		$qry = $this->db->query("SELECT * FROM users where username = '".$username."' and password = '".md5($password)."' ");
-		if($qry->num_rows > 0){
-			foreach ($qry->fetch_array() as $key => $value) {
-				if($key != 'passwors' && !is_numeric($key))
-					$_SESSION['login_'.$key] = $value;
-			}
-			if($_SESSION['login_alumnus_id'] > 0){
-				$bio = $this->db->query("SELECT * FROM alumnus_bio where id = ".$_SESSION['login_alumnus_id']);
-				if($bio->num_rows > 0){
-					foreach ($bio->fetch_array() as $key => $value) {
-						if($key != 'passwors' && !is_numeric($key))
-							$_SESSION['bio'][$key] = $value;
-					}
-				}
-			}
-			if($_SESSION['bio']['status'] != 1){
-					foreach ($_SESSION as $key => $value) {
-						unset($_SESSION[$key]);
-					}
-					return 2 ;
-					exit;
-				}
-				return 1;
-		}else{
-			return 3;
-		}
-	}
+	 
 	function logout(){
 		session_destroy();
 		foreach ($_SESSION as $key => $value) {
@@ -74,13 +43,7 @@ Class Action {
 		}
 		header("location:login.php");
 	}
-	function logout2(){
-		session_destroy();
-		foreach ($_SESSION as $key => $value) {
-			unset($_SESSION[$key]);
-		}
-		header("location:../index.php");
-	}
+	 
 
 	function save_user(){
 		extract($_POST);
@@ -112,44 +75,7 @@ Class Action {
 		if($delete)
 			return 1;
 	}
-	function signup(){
-		extract($_POST);
-		$data = " name = '".$firstname.' '.$lastname."' ";
-		$data .= ", username = '$email' ";
-		$data .= ", password = '".md5($password)."' ";
-		$chk = $this->db->query("SELECT * FROM users where username = '$email' ")->num_rows;
-		if($chk > 0){
-			return 2;
-			exit;
-		}
-			$save = $this->db->query("INSERT INTO users set ".$data);
-		if($save){
-			$uid = $this->db->insert_id;
-			$data = '';
-			foreach($_POST as $k => $v){
-				if($k =='password')
-					continue;
-				if(empty($data) && !is_numeric($k) )
-					$data = " $k = '$v' ";
-				else
-					$data .= ", $k = '$v' ";
-			}
-			if($_FILES['img']['tmp_name'] != ''){
-							$fname = strtotime(date('y-m-d H:i')).'_'.$_FILES['img']['name'];
-							$move = move_uploaded_file($_FILES['img']['tmp_name'],'assets/uploads/'. $fname);
-							$data .= ", avatar = '$fname' ";
-
-			}
-			$save_alumni = $this->db->query("INSERT INTO alumnus_bio set $data ");
-			if($data){
-				$aid = $this->db->insert_id;
-				$this->db->query("UPDATE users set alumnus_id = $aid where id = $uid ");
-				$login = $this->login2();
-				if($login)
-				return 1;
-			}
-		}
-	}
+	 
 	function update_account(){
 		extract($_POST);
 		$data = " name = '".$firstname.' '.$lastname."' ";
@@ -162,65 +88,11 @@ Class Action {
 			exit;
 		}
 			$save = $this->db->query("UPDATE users set $data where id = '{$_SESSION['login_id']}' ");
-		if($save){
-			$data = '';
-			foreach($_POST as $k => $v){
-				if($k =='password')
-					continue;
-				if(empty($data) && !is_numeric($k) )
-					$data = " $k = '$v' ";
-				else
-					$data .= ", $k = '$v' ";
-			}
-			if($_FILES['img']['tmp_name'] != ''){
-							$fname = strtotime(date('y-m-d H:i')).'_'.$_FILES['img']['name'];
-							$move = move_uploaded_file($_FILES['img']['tmp_name'],'assets/uploads/'. $fname);
-							$data .= ", avatar = '$fname' ";
-
-			}
-			$save_alumni = $this->db->query("UPDATE alumnus_bio set $data where id = '{$_SESSION['bio']['id']}' ");
-			if($data){
-				foreach ($_SESSION as $key => $value) {
-					unset($_SESSION[$key]);
-				}
-				$login = $this->login2();
-				if($login)
-				return 1;
-			}
-		}
+		 
+			 
 	}
 
-	function save_settings(){
-		extract($_POST);
-		$data = " name = '".str_replace("'","&#x2019;",$name)."' ";
-		$data .= ", email = '$email' ";
-		$data .= ", contact = '$contact' ";
-		$data .= ", about_content = '".htmlentities(str_replace("'","&#x2019;",$about))."' ";
-		if($_FILES['img']['tmp_name'] != ''){
-						$fname = strtotime(date('y-m-d H:i')).'_'.$_FILES['img']['name'];
-						$move = move_uploaded_file($_FILES['img']['tmp_name'],'assets/uploads/'. $fname);
-					$data .= ", cover_img = '$fname' ";
-
-		}
-		
-		// echo "INSERT INTO system_settings set ".$data;
-		$chk = $this->db->query("SELECT * FROM system_settings");
-		if($chk->num_rows > 0){
-			$save = $this->db->query("UPDATE system_settings set ".$data);
-		}else{
-			$save = $this->db->query("INSERT INTO system_settings set ".$data);
-		}
-		if($save){
-		$query = $this->db->query("SELECT * FROM system_settings limit 1")->fetch_array();
-		foreach ($query as $key => $value) {
-			if(!is_numeric($key))
-				$_SESSION['settings'][$key] = $value;
-		}
-
-			return 1;
-				}
-	}
-
+	 
 	
 	function save_course(){
 		extract($_POST);
@@ -403,13 +275,7 @@ Class Action {
 		}
 			return json_encode($data);
 	}
-	function delete_forum(){
-		extract($_POST);
-		$delete = $this->db->query("DELETE FROM forum_topics where id = ".$id);
-		if($delete){
-			return 1;
-		}
-	}
+	 
 	 
 	 
 }
